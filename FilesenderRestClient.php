@@ -81,7 +81,7 @@ function Zip($source, $destination)
 
 $tempfname = tempnam ( '/tmp/' , 'ESRC' );
 
-Zip (ASSET_BASE.'/1', $tempfname);
+Zip (ASSET_BASE.ASSET_BASESUFFIX.'/1', $tempfname);
 
 try {
     $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
