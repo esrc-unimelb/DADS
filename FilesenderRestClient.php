@@ -81,7 +81,7 @@ function Zip($source, $destination)
 
 $tempfname = tempnam ( '/tmp/' , 'ESRC' );
 
-Zip ('/tmp/1', $tempfname);
+Zip (ASSET_BASE.'/1', $tempfname);
 
 try {
     $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
@@ -108,7 +108,7 @@ $tempfname
 ),
   array('xx@aarnet.edu.au'),
         'API TEST subject',
-        'API TEST message',
+        ACCESS_CONDITIONS,
 	time() + 24*60*60*30,
 	array("email_download_complete", "email_report_on_closing")
 	));
