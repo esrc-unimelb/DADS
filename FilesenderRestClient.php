@@ -1,4 +1,53 @@
 <?php
+require_once 'FilesenderRestClient.class.php';
+
+if (!include('config.php'))
+   die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
+
+function Zip($source, $destination)
+{
+    if (!extension_loaded('zip') || !file_exists($source)) {
+        return false;
+    }
+
+    $zip = new ZipArchive();
+    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+        return false;
+    }
+
+    $source = str_replace('\\', '/', realpath($source));
+
+    if (is_dir($source) === true)
+    {
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file)
+        {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+                continue;
+
+            $file = realpath($file);
+
+            if (is_dir($file) === true)
+            {
+                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+            }
+            else if (is_file($file) === true)
+            {
+                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+            }
+        }
+    }
+    else if (is_file($source) === true)
+    {
+        $zip->addFromString(basename($source), file_get_contents($source));
+    }
+
+    return $zip->close();
+}
 
 /*
  * FileSender www.filesender.org
@@ -30,18 +79,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Filesender REST client usage example
- */
+$tempfname = tempnam ( '/tmp/' , 'ESRC' );
 
-require_once 'FilesenderRestClient.class.php';
-
-$url='https://cloudstor.aarnet.edu.au/sender/rest.php';
-$user_id='';
-$apikey='';
+Zip ('/tmp/1', $tempfname);
 
 try {
-    $c = new FilesenderRestClient($url, 'user', $user_id, $apikey);
+    $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
     
     //print_r($c->getInfo());
 
@@ -52,21 +95,21 @@ try {
      * @param string $from sender email
      * @param mixed $files file path or array of files path
      * @param array $recipients array of recipients addresses
-     * @param string $subject optionnal subject
-     * @param string $message optionnal message
+     * @param string $subject optional subject
+     * @param string $message optional message
      * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
      * @param array $options array of selected option identifiers
      */
     print_r($c->sendFiles(
-	$user_id,
-	$user_id,
+	FILESENDER_USERID,
+	FILESENDER_USERID,
 	array(
-'/etc/passwd',
+$tempfname
 ),
-	array('xx@aarnet.edu.au'),
-	'API TEST subject',
-	'API TEST message',
-	'1490943101',
+  array('xx@aarnet.edu.au'),
+        'API TEST subject',
+        'API TEST message',
+	time() + 24*60*60*30,
 	array("email_download_complete", "email_report_on_closing")
 	));
 
@@ -74,3 +117,5 @@ try {
 } catch(Exception $e) {
     echo 'EXCEPTION ['.$e->getCode().'] '.$e->getMessage();
 }
+
+unlink ($tempfname);

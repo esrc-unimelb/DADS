@@ -1,0 +1,7 @@
+<?php
+
+define('FILESENDER_URL', 'https://cloudstor.aarnet.edu.au/sender/rest.php');
+define('FILESENDER_USERID', 'you@doma.in');
+define('FILESENDER_APIKEY', 'fffffffffffffffffffffffffffffffffffffffffffffffff');
+
+?>
