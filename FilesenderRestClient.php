@@ -1,4 +1,8 @@
 <?php
+require_once 'FilesenderRestClient.class.php';
+
+if (!include('config.php'))
+   die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
 
 function Zip($source, $destination)
 {
@@ -79,18 +83,8 @@ $tempfname = tempnam ( '/tmp/' , 'ESRC' );
 
 Zip ('/tmp/1', $tempfname);
 
-/**
- * Filesender REST client usage example
- */
-
-require_once 'FilesenderRestClient.class.php';
-
-$url='https://cloudstor.aarnet.edu.au/sender/rest.php';
-$user_id='';
-$apikey='';
-
 try {
-    $c = new FilesenderRestClient($url, 'user', $user_id, $apikey);
+    $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
     
     //print_r($c->getInfo());
 
@@ -107,8 +101,8 @@ try {
      * @param array $options array of selected option identifiers
      */
     print_r($c->sendFiles(
-	$user_id,
-	$user_id,
+	FILESENDER_USERID,
+	FILESENDER_USERID,
 	array(
 $tempfname
 ),
