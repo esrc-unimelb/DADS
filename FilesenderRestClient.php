@@ -1,5 +1,10 @@
 <?php
 require_once 'FilesenderRestClient.class.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set("error_log", "/tmp/php-error.log");
+
 
 if (!include('config.php'))
    die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
@@ -81,7 +86,7 @@ function Zip($source, $destination)
 
 $tempfname = tempnam ( '/tmp/' , 'ESRC' );
 
-Zip ('/tmp/1', $tempfname);
+Zip (ASSET_BASE.'/BROW00001', $tempfname);
 
 try {
     $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
@@ -108,7 +113,7 @@ $tempfname
 ),
   array('xx@aarnet.edu.au'),
         'API TEST subject',
-        'API TEST message',
+        "By downloading this file, you agree to the following conditions : ".ACCESS_CONDITIONS,
 	time() + 24*60*60*30,
 	array("email_download_complete", "email_report_on_closing")
 	));
@@ -119,3 +124,21 @@ $tempfname
 }
 
 unlink ($tempfname);
+?>
+<!DOCTYPE html>
+<html>
+<body>
+<?php
+if (isset($_POST['referrer'])) {
+?>
+<a href="<?php echo htmlspecialchars($_POST['referrer']) ;?>>Return to the site</a>
+<?php
+}
+?>
+</body>
+</html>
+
+
+
+
+
