@@ -34,10 +34,6 @@
 
 
 require_once 'FilesenderRestClient.class.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set("error_log", "/tmp/php-error.log");
 
 if (!include('config.php'))
    die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
@@ -92,14 +88,13 @@ $basename = basename($_POST['itemid']);
 $ohrmname = substr($basename, 0, 4);
 
 $tempfname = tempnam ( '/tmp/' , $ohrmname );
+$tempfname .= '.zip';
 
 Zip (ASSET_BASE."/".$basename, $tempfname);
 
 try {
     $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
     
-    //print_r($c->getInfo());
-
    /**
      * Upload files to recipients
      *
