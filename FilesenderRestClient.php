@@ -32,7 +32,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 require_once 'FilesenderRestClient.class.php';
 
 if (!include('config.php'))
@@ -85,11 +84,17 @@ function Zip($source, $destination)
 
 $basename = basename($_POST['itemid']);
 
+// sanitise $basename, by removing . and slashes
+$basename = preg_replace('((^\.)|\/|(\.$))', '_', $basename);
+
+// the OHRM/project name is the first four characters of the basename, in capitals
 $ohrmname = substr($basename, 0, 4);
 
+// create a save, unique filename for delivery
 $tempfname = tempnam ( '/tmp/' , $ohrmname );
 $tempfname .= '.zip';
 
+// recursively Zip the item directory 
 Zip (ASSET_BASE."/".$basename, $tempfname);
 
 try {
