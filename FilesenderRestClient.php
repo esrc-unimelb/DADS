@@ -1,3 +1,4 @@
+<?php
 /*
  This file contains source code from the Filesender project.
 
@@ -31,7 +32,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<?php
+
 require_once 'FilesenderRestClient.class.php';
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
