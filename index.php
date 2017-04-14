@@ -2,10 +2,12 @@
 if (!include('config.php'))
    die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
 ?>
+
+
 <html>
 <body>
 <form action="FilesenderRestClient.php" method="post">
-<input type="hidden" name="itemid" value="<?php echo htmlspecialchars($_REQUEST['itemid']) ;?>">
+<input type="hidden" name="itemid" value="<?php echo htmlspecialchars($_SERVER['QUERY_STRING']) ;?>">
 
 <?php
 if (isset($_SERVER['HTTP_REFERER'])) {
