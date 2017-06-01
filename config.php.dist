@@ -5,5 +5,6 @@ define('FILESENDER_USERID', 'you@doma.in');
 define('FILESENDER_APIKEY', 'fffffffffffffffffffffffffffffffffffffffffffffffff');
 define('ACCESS_CONDITIONS', '');
 define('ASSET_BASE','');
+define('ASSET_BASESUFFIX','');
 
 ?>
