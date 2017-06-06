@@ -90,6 +90,9 @@ $basename = preg_replace('((^\.)|\/|(\.$))', '_', $basename);
 // the OHRM/project name is the first four characters of the basename, in capitals
 $ohrmname = substr($basename, 0, 4);
 
+// Validate that user has specified an asset directory that DADS is allowed to operate from
+if (!in_array(strtoupper($ohrmname), $OHRMLIST)) die ("Invalid asset base directory specified for download");
+
 // create a save, unique filename for delivery
 $tempfname = tempnam ( '/tmp/' , $ohrmname );
 $tempfname .= '.zip';
