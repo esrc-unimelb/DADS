@@ -1,4 +1,6 @@
 <?php
+require_once 'Dads.class.php';
+
 if (!include('config.php'))
    die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
 ?>
