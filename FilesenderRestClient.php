@@ -36,7 +36,7 @@ require_once 'FilesenderRestClient.class.php';
 require_once 'Dads.class.php';
 
 if (!include('config.php'))
-   die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
+    die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
 
 $basename = basename($_POST['itemid']);
 
@@ -50,7 +50,7 @@ $ohrmname = substr($basename, 0, 4);
 if (!in_array(strtoupper($ohrmname), $OHRMLIST)) die ("Invalid asset base directory specified for download");
 
 // create a save, unique filename for delivery
-$tempfname = tempnam ( '/tmp/' , $ohrmname );
+$tempfname = tempnam('/tmp/', $ohrmname);
 $tempfname .= '.zip';
 
 // Dont hammer the Filesender server if we're developing / testing
@@ -58,48 +58,49 @@ if (!(defined('DADS_DEBUG') && 1 == DADS_DEBUG)) {
     // recursively Zip the item directory
     Zip(ASSET_BASE . "/" . $basename, $tempfname);
 
-        try {
-            $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
+    try {
+        $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
 
-            /**
-             * Upload files to recipients
-             *
-             * @param string $user_id (will be ignored if remote user authentication in use)
-             * @param string $from sender email
-             * @param mixed $files file path or array of files path
-             * @param array $recipients array of recipients addresses
-             * @param string $subject optional subject
-             * @param string $message optional message
-             * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
-             * @param array $options array of selected option identifiers
-             **/
-            print_r($c->sendFiles(
-                FILESENDER_USERID,
-                FILESENDER_USERID,
-                array(
-                    $tempfname
-                ),
-                array($_POST['email']),
-                '[' . $ohrmname . '] Your selected items are ready for download.',
-                "By downloading this file, you agree to the following conditions : " . ACCESS_CONDITIONS,
-                time() + 24 * 60 * 60 * 30,
-                array("email_download_complete", "email_report_on_closing")
-            )
-            );
+        /**
+         * Upload files to recipients
+         *
+         * @param string $user_id (will be ignored if remote user authentication in use)
+         * @param string $from sender email
+         * @param mixed $files file path or array of files path
+         * @param array $recipients array of recipients addresses
+         * @param string $subject optional subject
+         * @param string $message optional message
+         * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
+         * @param array $options array of selected option identifiers
+         **/
+        print_r($c->sendFiles(
+            FILESENDER_USERID,
+            FILESENDER_USERID,
+            array(
+                $tempfname
+            ),
+            array($_POST['email']),
+            '[' . $ohrmname . '] Your selected items are ready for download.',
+            "By downloading this file, you agree to the following conditions : " . ACCESS_CONDITIONS,
+            time() + 24 * 60 * 60 * 30,
+            array("email_download_complete", "email_report_on_closing")
+        )
+        );
 
-        } catch (Exception $e) {
-            echo 'EXCEPTION [' . $e->getCode() . '] ' . $e->getMessage();
-        }
-        unlink($tempfname);
+    } catch (Exception $e) {
+        echo 'EXCEPTION [' . $e->getCode() . '] ' . $e->getMessage();
+    }
+    unlink($tempfname);
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <body>
-<br /><br />
-Your requested items have been sent. Please check your email address <i><?php echo($_POST['email'])?></i> for the download link.
-<br /><br />
-<?php echo (isset($_POST['referrer'])) ? '<a href="'.htmlspecialchars($_POST['referrer'])."\"".'>Return to the site</a>' : '<a href="/">Return to the site</a>' ?>
+<br/><br/>
+Your requested items have been sent. Please check your email address <i><?php echo($_POST['email']) ?></i> for the
+download link.
+<br/><br/>
+<?php echo (isset($_POST['referrer'])) ? '<a href="' . htmlspecialchars($_POST['referrer']) . "\"" . '>Return to the site</a>' : '<a href="/">Return to the site</a>' ?>
 </body>
 </html>
