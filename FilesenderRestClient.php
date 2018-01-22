@@ -141,16 +141,7 @@ unlink ($tempfname);
 <br /><br />
 Your requested items have been sent. Please check your email address <i><?php echo($_POST['email'])?></i> for the download link.
 <br /><br />
-<?php
-if (isset($_POST['referrer'])) {
-?>
-<a href="<?php echo htmlspecialchars($_POST['referrer']) ;?>">Return to the site</a>
-<?php
-} else
-?>
-<a href="/">Return to the site</a>
-<?php
-?>
+<?php echo (isset($_POST['referrer'])) ? '<a href="'.htmlspecialchars($_POST['referrer'])."\"".'>Return to the site</a>' : '<a href="/">Return to the site</a>' ?>
 </body>
 </html>
 

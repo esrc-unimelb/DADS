@@ -21,6 +21,7 @@ config.php constants:
 * ACCESS_CONDITIONS - Mandated access conditions for the archive.
 * ASSET_BASE - Location of the archive, relative to the root of your web server.
 * ASSET_BASESUFFIX - Directory under the selected archive item to deliver. For example, 'large' will only deliver large images, and no other assets.
+* OHRMLIST - An array of allowed ASSET directories
 
 ## Authors
 
