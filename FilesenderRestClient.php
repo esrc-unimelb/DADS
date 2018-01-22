@@ -97,44 +97,47 @@ if (!in_array(strtoupper($ohrmname), $OHRMLIST)) die ("Invalid asset base direct
 $tempfname = tempnam ( '/tmp/' , $ohrmname );
 $tempfname .= '.zip';
 
-// recursively Zip the item directory 
-Zip (ASSET_BASE."/".$basename, $tempfname);
+// Dont hammer the Filesender server if we're developing / testing
+if (!(defined('DADS_DEBUG') && 1 == DADS_DEBUG)) {
+    // recursively Zip the item directory
+    Zip(ASSET_BASE . "/" . $basename, $tempfname);
 
-try {
-    $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
-    
-   /**
-     * Upload files to recipients
-     *
-     * @param string $user_id (will be ignored if remote user authentication in use)
-     * @param string $from sender email
-     * @param mixed $files file path or array of files path
-     * @param array $recipients array of recipients addresses
-     * @param string $subject optional subject
-     * @param string $message optional message
-     * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
-     * @param array $options array of selected option identifiers
-     **/
-    print_r($c->sendFiles(
-	FILESENDER_USERID,
-	FILESENDER_USERID,
-	array(
-$tempfname
-),
-  array($_POST['email']),
-        '['.$ohrmname.'] Your selected items are ready for download.',
-        "By downloading this file, you agree to the following conditions : ".ACCESS_CONDITIONS,
-	time() + 24*60*60*30,
-	array("email_download_complete", "email_report_on_closing")
-	));
+        try {
+            $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
 
+            /**
+             * Upload files to recipients
+             *
+             * @param string $user_id (will be ignored if remote user authentication in use)
+             * @param string $from sender email
+             * @param mixed $files file path or array of files path
+             * @param array $recipients array of recipients addresses
+             * @param string $subject optional subject
+             * @param string $message optional message
+             * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
+             * @param array $options array of selected option identifiers
+             **/
+            print_r($c->sendFiles(
+                FILESENDER_USERID,
+                FILESENDER_USERID,
+                array(
+                    $tempfname
+                ),
+                array($_POST['email']),
+                '[' . $ohrmname . '] Your selected items are ready for download.',
+                "By downloading this file, you agree to the following conditions : " . ACCESS_CONDITIONS,
+                time() + 24 * 60 * 60 * 30,
+                array("email_download_complete", "email_report_on_closing")
+            )
+            );
 
-} catch(Exception $e) {
-    echo 'EXCEPTION ['.$e->getCode().'] '.$e->getMessage();
+        } catch (Exception $e) {
+            echo 'EXCEPTION [' . $e->getCode() . '] ' . $e->getMessage();
+        }
+        unlink($tempfname);
 }
-
-unlink ($tempfname);
 ?>
+
 <!DOCTYPE html>
 <html>
 <body>
