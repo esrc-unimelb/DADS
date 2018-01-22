@@ -6,6 +6,7 @@ define('FILESENDER_APIKEY', 'fffffffffffffffffffffffffffffffffffffffffffffffff')
 define('ACCESS_CONDITIONS', '');
 define('ASSET_BASE','');
 define('ASSET_BASESUFFIX','');
+define('DADS_DEBUG',False);
 $OHRMLIST = array("BROX"); // A list of allowed ASSET directories
 
 ?>

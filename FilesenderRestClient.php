@@ -33,54 +33,10 @@
  */
 
 require_once 'FilesenderRestClient.class.php';
+require_once 'Dads.class.php';
 
 if (!include('config.php'))
    die('Error: Could not open \"config.php\", please edit and rename \"config.php.dist\"');
-
-function Zip($source, $destination)
-{
-    if (!extension_loaded('zip') || !file_exists($source)) {
-        return false;
-    }
-
-    $zip = new ZipArchive();
-    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
-        return false;
-    }
-
-    $source = str_replace('\\', '/', realpath($source));
-
-    if (is_dir($source) === true)
-    {
-        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
-
-        foreach ($files as $file)
-        {
-            $file = str_replace('\\', '/', $file);
-
-            // Ignore "." and ".." folders
-            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
-                continue;
-
-            $file = realpath($file);
-
-            if (is_dir($file) === true)
-            {
-                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-            }
-            else if (is_file($file) === true)
-            {
-                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
-            }
-        }
-    }
-    else if (is_file($source) === true)
-    {
-        $zip->addFromString(basename($source), file_get_contents($source));
-    }
-
-    return $zip->close();
-}
 
 $basename = basename($_POST['itemid']);
 
@@ -97,44 +53,47 @@ if (!in_array(strtoupper($ohrmname), $OHRMLIST)) die ("Invalid asset base direct
 $tempfname = tempnam ( '/tmp/' , $ohrmname );
 $tempfname .= '.zip';
 
-// recursively Zip the item directory 
-Zip (ASSET_BASE."/".$basename, $tempfname);
+// Dont hammer the Filesender server if we're developing / testing
+if (!(defined('DADS_DEBUG') && 1 == DADS_DEBUG)) {
+    // recursively Zip the item directory
+    Zip(ASSET_BASE . "/" . $basename, $tempfname);
 
-try {
-    $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
-    
-   /**
-     * Upload files to recipients
-     *
-     * @param string $user_id (will be ignored if remote user authentication in use)
-     * @param string $from sender email
-     * @param mixed $files file path or array of files path
-     * @param array $recipients array of recipients addresses
-     * @param string $subject optional subject
-     * @param string $message optional message
-     * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
-     * @param array $options array of selected option identifiers
-     **/
-    print_r($c->sendFiles(
-	FILESENDER_USERID,
-	FILESENDER_USERID,
-	array(
-$tempfname
-),
-  array($_POST['email']),
-        '['.$ohrmname.'] Your selected items are ready for download.',
-        "By downloading this file, you agree to the following conditions : ".ACCESS_CONDITIONS,
-	time() + 24*60*60*30,
-	array("email_download_complete", "email_report_on_closing")
-	));
+        try {
+            $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
 
+            /**
+             * Upload files to recipients
+             *
+             * @param string $user_id (will be ignored if remote user authentication in use)
+             * @param string $from sender email
+             * @param mixed $files file path or array of files path
+             * @param array $recipients array of recipients addresses
+             * @param string $subject optional subject
+             * @param string $message optional message
+             * @param string $expires expiry date (yyyy-mm-dd or unix timestamp)
+             * @param array $options array of selected option identifiers
+             **/
+            print_r($c->sendFiles(
+                FILESENDER_USERID,
+                FILESENDER_USERID,
+                array(
+                    $tempfname
+                ),
+                array($_POST['email']),
+                '[' . $ohrmname . '] Your selected items are ready for download.',
+                "By downloading this file, you agree to the following conditions : " . ACCESS_CONDITIONS,
+                time() + 24 * 60 * 60 * 30,
+                array("email_download_complete", "email_report_on_closing")
+            )
+            );
 
-} catch(Exception $e) {
-    echo 'EXCEPTION ['.$e->getCode().'] '.$e->getMessage();
+        } catch (Exception $e) {
+            echo 'EXCEPTION [' . $e->getCode() . '] ' . $e->getMessage();
+        }
+        unlink($tempfname);
 }
-
-unlink ($tempfname);
 ?>
+
 <!DOCTYPE html>
 <html>
 <body>
@@ -144,8 +103,3 @@ Your requested items have been sent. Please check your email address <i><?php ec
 <?php echo (isset($_POST['referrer'])) ? '<a href="'.htmlspecialchars($_POST['referrer'])."\"".'>Return to the site</a>' : '<a href="/">Return to the site</a>' ?>
 </body>
 </html>
-
-
-
-
-
