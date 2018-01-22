@@ -25,3 +25,5 @@ if (!include('config.php'))
     <br/>
     <p><input type="submit" value="Request the items"></p>
 </form>
+</body>
+</html>
