@@ -147,8 +147,3 @@ Your requested items have been sent. Please check your email address <i><?php ec
 <?php echo (isset($_POST['referrer'])) ? '<a href="'.htmlspecialchars($_POST['referrer'])."\"".'>Return to the site</a>' : '<a href="/">Return to the site</a>' ?>
 </body>
 </html>
-
-
-
-
-
