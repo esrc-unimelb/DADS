@@ -96,6 +96,9 @@ if (!(defined('DADS_DEBUG') && 1 == DADS_DEBUG)) {
 
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" href="assets/dads.css">
+</head>
 <body>
 <br/><br/>
 Your requested items have been sent. Please check your email address <i><?php echo($_POST['email']) ?></i> for the

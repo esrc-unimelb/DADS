@@ -7,6 +7,9 @@ if (!include('config.php'))
 
 
 <html>
+<head>
+    <link rel="stylesheet" href="assets/dads.css">
+</head>
 <body>
 <form action="FilesenderRestClient.php" method="post">
     <input type="hidden" name="itemid" value="<?php echo htmlspecialchars($_SERVER['QUERY_STRING']); ?>">
@@ -18,8 +21,12 @@ if (!include('config.php'))
         <?php
     }
     ?>
-    You have requested items that have conditional access. By submitting your email address, you are agreeing to the
-    following conditions of access <?php echo ACCESS_CONDITIONS; ?>
+    <p>You have requested items that have conditional access. </p>
+    <p>A preview of your requested items:</p>
+    <div id="scroll">
+        fsklfsdfldkfklfsfdklj
+    </div>
+    <p>By submitting your email address, you are agreeing to the following conditions of access <?php echo ACCESS_CONDITIONS; ?> </p>
     <br/>
     E-mail: <input type="text" name="email"/></p>
     <br/>
