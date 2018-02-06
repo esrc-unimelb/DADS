@@ -1,4 +1,5 @@
 <?php
+require('fpdf.php');
 
 // A PHP5 compatible clone of PHP7's dirname function
 function dirname_r($path, $count=1){
@@ -46,6 +47,40 @@ function Zip($source, $destination)
     }
 
     return $zip->close();
+}
+
+
+// Recursively generate PDF of a collection
+function generatePDF($source, $destination, $recipient)
+{
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial','B',16);
+    $pdf->MultiCell(180,10,'This archive has been provided to '.$recipient.' under the following conditions: '.ACCESS_CONDITIONS);
+
+    $source = str_replace('\\', '/', realpath($source));
+
+    if (is_dir($source) === true) {
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file) {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                continue;
+
+            $file = realpath($file);
+
+            if (is_file($file) === true) {
+                $pdf->Image($file);
+            }
+        }
+    } else if (is_file($source) === true) {
+        $pdf->Image($file);
+    }
+
+    $pdf->Output("F", $destination);
 }
 
 // Recursively preview/create a proof sheet of a collection
