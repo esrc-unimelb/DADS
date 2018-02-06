@@ -51,12 +51,14 @@ if (!in_array(strtoupper($ohrmname), $OHRMLIST)) die ("Invalid asset base direct
 
 // create a save, unique filename for delivery
 $tempfname = tempnam('/tmp/', $ohrmname);
-$tempfname .= '.zip';
+////$tempfname .= '.zip';
+$tempfname .= '.pdf';
 
 // Dont hammer the Filesender server if we're developing / testing
 if (!(defined('DADS_DEBUG') && 1 == DADS_DEBUG)) {
     // recursively Zip the item directory
-    Zip(ASSET_BASE . "/" . $basename, $tempfname);
+    ////Zip(ASSET_BASE . "/" . $basename, $tempfname);
+    generatePDF(ASSET_BASE . "/" . $basename, $tempfname, $_POST['email']);
 
     try {
         $c = new FilesenderRestClient(FILESENDER_URL, 'user', FILESENDER_USERID, FILESENDER_APIKEY);
