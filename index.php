@@ -24,7 +24,19 @@ if (!include('config.php'))
     <p>You have requested items that have conditional access. </p>
     <p>A preview of your requested items:</p>
     <div id="scroll">
-        fsklfsdfldkfklfsfdklj
+        <?php
+        $basename = basename(htmlspecialchars($_SERVER['QUERY_STRING']));
+
+        // sanitise $basename, by removing . and slashes
+        $basename = preg_replace('((^\.)|\/|(\.$))', '_', $basename);
+
+        // the OHRM/project name is the first four characters of the basename, in capitals
+        $ohrmname = substr($basename, 0, 4);
+
+        // Validate that user has specified an asset directory that DADS is allowed to operate from
+        if (!in_array(strtoupper($ohrmname), $OHRMLIST)) die ("Invalid asset base directory specified for download");
+        preview(ASSET_BASE . "/" . $basename);
+        ?>
     </div>
     <p>By submitting your email address, you are agreeing to the following conditions of access <?php echo ACCESS_CONDITIONS; ?> </p>
     <br/>
