@@ -1,5 +1,13 @@
 <?php
 
+function dirname_r($path, $count=1){
+    if ($count > 1){
+        return dirname(dirname_r($path, --$count));
+    }else{
+        return dirname($path);
+    }
+}
+
 function Zip($source, $destination)
 {
     if (!extension_loaded('zip') || !file_exists($source)) {
@@ -38,4 +46,30 @@ function Zip($source, $destination)
     return $zip->close();
 }
 
+function Preview($source)
+{
+    define("IMAGETYPE", 'thumbnails');
+
+    $source = str_replace('\\', '/', realpath($source));
+    $source = rtrim($source, "\\");
+
+    if (is_dir($source . "/" . "thumbnails") === true) {
+
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source . "/" . IMAGETYPE), RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($files as $file) {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                continue;
+
+            $file = realpath($file);
+            $imagedirectory = basename(dirname_r($file, 2));
+            if (is_file($file))
+                echo '<img src="' . dirname(htmlspecialchars($_SERVER['HTTP_REFERER'])) . '/images/' . $imagedirectory . '/' . IMAGETYPE . '/' . basename($file) . '" width="40"/>';
+        }
+
+    }
+    return;
+}
 ?>
