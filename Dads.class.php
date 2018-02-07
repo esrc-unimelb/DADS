@@ -58,14 +58,19 @@ function generatePDF($source, $destination, $recipient)
     $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'This archive has been provided to '.$recipient.' under the following conditions: '.ACCESS_CONDITIONS);
 
+    // Lets not recurse the entire collection!
+    $source .= '/large';
+    echo $source;
     $source = str_replace('\\', '/', realpath($source));
 
     if (is_dir($source) === true) {
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
-
-        foreach ($files as $file) {
+        // Sort our files, by filename
+        $sorted_files = iterator_to_array($files);
+        sort($sorted_files, SORT_NATURAL);
+        foreach ($sorted_files as $file) {
             $file = str_replace('\\', '/', $file);
-
+            echo $file.' ';
             // Ignore "." and ".." folders
             if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
                 continue;
@@ -95,7 +100,12 @@ function Preview($source)
     if (is_dir($source . "/" . "thumbnails") === true) {
 
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source . "/" . IMAGETYPE), RecursiveIteratorIterator::SELF_FIRST);
-        foreach ($files as $file) {
+
+        // Sort our files, by filename
+        $sorted_files = iterator_to_array($files);
+        sort($sorted_files, SORT_NATURAL);
+
+        foreach ($sorted_files as $file) {
             $file = str_replace('\\', '/', $file);
 
             // Ignore "." and ".." folders
