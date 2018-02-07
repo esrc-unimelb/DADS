@@ -121,7 +121,13 @@ function generatePDF($source, $destination, $recipient)
         $pdf->Image($file);
     }
 
-    $pdf->Output("F", $destination);
+    if ((defined('DADS_DEBUG') && 1 == DADS_DEBUG))
+    {
+        $pdf->Output("I");
+    } else
+    {
+        $pdf->Output("F", $destination);
+    }
 }
 
 // Recursively preview/create a proof sheet of a collection
