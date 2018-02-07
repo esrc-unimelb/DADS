@@ -8,7 +8,7 @@ if (!include('config.php'))
 
 <html>
 <head>
-    <link rel="stylesheet" href="assets/dads.css">
+    <link rel="stylesheet" type="text/css" href="assets/dads.css">
 </head>
 <body>
 <form action="FilesenderRestClient.php" method="post">
@@ -23,7 +23,7 @@ if (!include('config.php'))
     ?>
     <p>You have requested items that have conditional access. </p>
     <p>A preview of your requested items:</p>
-    <div id="scroll">
+    <div id="" style="overflow-y: scroll; overflow-x: hidden; height:250px; max-width:80%; margin: 0 auto">
         <?php
         $basename = basename(htmlspecialchars($_SERVER['QUERY_STRING']));
 
