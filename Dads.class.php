@@ -82,6 +82,22 @@ function Zip($source, $destination)
 }
 
 
+function pushImage($pdf, $file)
+{
+    // Should the page orientation be Landscape, or portrait?
+    list($width, $height) = getimagesize($file);
+
+    if ($width > $height)
+    {
+            $pdf->Addpage ('L');
+    }
+        else
+        {
+            $pdf->Addpage ('P');
+        }
+    $pdf->Image($file);
+}
+
 // Recursively generate PDF of a collection
 function generatePDF($source, $destination, $recipient)
 {
@@ -112,13 +128,11 @@ function generatePDF($source, $destination, $recipient)
             $file = realpath($file);
 
             if (is_file($file) === true) {
-                $pdf->AddPage();
-                $pdf->Image($file);
+                pushImage($pdf, $file);
             }
         }
     } else if (is_file($source) === true) {
-        $pdf->AddPage();
-        $pdf->Image($file);
+        pushImage($pdf, $file);
     }
 
     if ((defined('DADS_DEBUG') && 1 == DADS_DEBUG))
