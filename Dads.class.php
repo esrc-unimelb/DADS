@@ -4,7 +4,17 @@ require('fpdf.php');
 class PDF extends FPDF
 {
     public $sourcefilename = '';
-// Page header
+
+
+    const DPI = 150;
+    const MM_IN_INCH = 25.4;
+    const A4_HEIGHT = 297;
+    const A4_WIDTH = 210;
+    // tweak these values (in pixels)
+    const MAX_WIDTH = 1650;
+    const MAX_HEIGHT = 1150;
+
+    // Page header
     function Header()
     {
         // Logo
@@ -30,6 +40,81 @@ class PDF extends FPDF
         $this->Cell(0,10,basename($this->sourcefilename),0,0,'L');
         // Page number - Right Justify
         $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'R');
+    }
+
+// We use this function for pretty printing bullated lists
+    function MultiCellBltArray($w, $h, $blt_array, $border=0, $align='J', $fill=false)
+    {
+        if (!is_array($blt_array))
+        {
+            die('MultiCellBltArray requires an array with the following keys: bullet, margin, text, indent, spacer');
+            exit;
+        }
+
+        //Save x
+        $bak_x = $this->x;
+
+        for ($i=0; $i<sizeof($blt_array['text']); $i++)
+        {
+            //Get bullet width including margin
+            $blt_width = $this->GetStringWidth($blt_array['bullet'] . $blt_array['margin'])+$this->cMargin*2;
+
+            // SetX
+            $this->SetX($bak_x);
+
+            //Output indent
+            if ($blt_array['indent'] > 0)
+                $this->Cell($blt_array['indent']);
+
+            //Output bullet
+            $this->Cell($blt_width, $h, $blt_array['bullet'] . $blt_array['margin'], 0, '', $fill);
+
+            //Output text
+            $this->MultiCell($w-$blt_width, $h, $blt_array['text'][$i], $border, $align, $fill);
+
+            //Insert a spacer between items if not the last item
+            if ($i != sizeof($blt_array['text'])-1)
+                $this->Ln($blt_array['spacer']);
+
+            //Increment bullet if it's a number
+            if (is_numeric($blt_array['bullet']))
+                $blt_array['bullet']++;
+        }
+
+        //Restore x
+        $this->x = $bak_x;
+    }
+
+    function pixelsToMM($val) {
+        return $val * self::MM_IN_INCH / self::DPI;
+    }
+    function resizeToFit($imgFilename) {
+        list($width, $height) = getimagesize($imgFilename);
+        $widthScale = self::MAX_WIDTH / $width;
+        $heightScale = self::MAX_HEIGHT / $height;
+        $scale = min($widthScale, $heightScale);
+        return array(
+            round($this->pixelsToMM($scale * $width)),
+            round($this->pixelsToMM($scale * $height))
+        );
+    }
+    function centreImage($img) {
+        list($width, $height) = $this->resizeToFit($img);
+
+        if ($width < $height) {
+            $this->Image(
+                $img, (self::A4_HEIGHT - $width) / 2,
+                (self::A4_WIDTH - $height) / 2,
+                $width,
+                $height
+            );
+        } else {
+            $this->Image(
+                $img,
+                (self::A4_WIDTH - $height) / 2, (self::A4_HEIGHT - $width) / 2,
+                $height,$width
+            );
+        }
     }
 }
 
@@ -81,6 +166,39 @@ function Zip($source, $destination)
     return $zip->close();
 }
 
+function htmlPrettyPrint ($htmlstring)
+{
+    $bits = explode("\n", $htmlstring);
+    $htmlstring = "<ul>";
+    foreach($bits as $bit)
+    {
+        $htmlstring .= "<li>" . $bit . "</li>";
+    }
+    $htmlstring .= "</ul>";
+
+    return $htmlstring;
+}
+
+function pdfPrettyPrint ($pdf, $pdfstring)
+{
+    $test1 = array();
+    $test1['bullet'] = chr(149);
+    $test1['margin'] = ' ';
+    $test1['indent'] = 0;
+    $test1['spacer'] = 0;
+    $test1['text'] = array();
+    $i = 0;
+
+    $bits = explode("\n", $pdfstring);
+
+    foreach ($bits as $bit) {
+        $test1['text'][$i] = $bit;
+        $i++;
+    }
+
+    $pdf->SetX(10);
+    $pdf->MultiCellBltArray(190, 6, $test1);
+}
 
 function pushImage($pdf, $file)
 {
@@ -95,7 +213,7 @@ function pushImage($pdf, $file)
         {
             $pdf->Addpage ('P');
         }
-    $pdf->Image($file);
+    $pdf->centreImage($file);
 }
 
 // Recursively generate PDF of a collection
@@ -106,8 +224,9 @@ function generatePDF($source, $destination, $recipient)
     $pdf->AliasNbPages();
     $pdf->AddPage();
     $pdf->SetFont('Arial','B',16);
-    $pdf->MultiCell(180,10,'This archive has been provided to '.$recipient.' under the following conditions: '.ACCESS_CONDITIONS);
-
+    $pdf->sourcefilename = '';
+    //$pdf->MultiCell(180,10,'This archive has been provided to '.$recipient.' under the following conditions: '.ACCESS_CONDITIONS);
+    pdfPrettyPrint($pdf,ACCESS_CONDITIONS);
     // Lets not recurse the entire collection!
     $source .= '/large';
     $source = str_replace('\\', '/', realpath($source));

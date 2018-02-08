@@ -21,7 +21,13 @@ if (!include('config.php'))
         <?php
     }
     ?>
-    <p>You have requested items that have conditional access. </p>
+    <div class="wrapper">
+        <header class="header">
+        </header>
+
+        <main class="content">
+        <p>Content Notice : </p>
+    <?php echo htmlPrettyPrint(CONTENT_NOTICE); ?>
     <p>A preview of your requested items:</p>
     <div id="" style="overflow-y: scroll; overflow-x: hidden; height:250px; max-width:80%; margin: 0 auto">
         <?php
@@ -38,11 +44,18 @@ if (!include('config.php'))
         preview(ASSET_BASE . "/" . $basename);
         ?>
     </div>
-    <p>By submitting your email address, you are agreeing to the following conditions of access <?php echo ACCESS_CONDITIONS; ?> </p>
-    <br/>
+    <p>Access conditions : </p>
+    <?php echo htmlPrettyPrint(ACCESS_CONDITIONS); ?>
+    <p>Usage conditions : </p>
+    <?php echo htmlPrettyPrint(USAGE_CONDITIONS); ?>
+    <i>By submitting your email address, you are agreeing to the above <i>Conditions of Access</i> and <i>Conditions of use</i>.</p>
     E-mail: <input type="text" name="email"/></p>
-    <br/>
     <p><input type="submit" value="Request the items"></p>
+    </main>
+    </div>
+    <footer class="footer">
+    </footer><!-- .footer -->
+
 </form>
 </body>
 </html>
