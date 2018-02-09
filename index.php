@@ -23,12 +23,22 @@ if (!include('config.php'))
     ?>
     <div class="wrapper">
         <header class="header">
+	<center><br />
+	<p><font size="6">Digital Archive Delivery Service</font></p>
+Request form for: <br \>
+	<B>BROW00003</B> - Ian's Death, Funeral, Power of Attorney and related materials
+	</Center>	
         </header>
 
         <main class="content">
-        <p>Content Notice : </p>
-    <?php echo htmlPrettyPrint(CONTENT_NOTICE); ?>
-    <p>A preview of your requested items:</p>
+    <p><font size="4"><b>A preview of <?php $basename = basename(htmlspecialchars($_SERVER['QUERY_STRING']));
+
+        // sanitise $basename, by removing . and slashes
+        $basename = preg_replace('((^\.)|\/|(\.$))', '_', $basename);
+
+        // the OHRM/project name is the first four characters of the basename, in capitals
+        $ohrmname = substr($basename, 0, 4);
+; echo countitems(ASSET_BASE . "/" . $basename)?> items:</font></b></p>
     <div id="" style="overflow-y: scroll; overflow-x: hidden; height:250px; max-width:80%; margin: 0 auto">
         <?php
         $basename = basename(htmlspecialchars($_SERVER['QUERY_STRING']));
@@ -44,13 +54,16 @@ if (!include('config.php'))
         preview(ASSET_BASE . "/" . $basename);
         ?>
     </div>
-    <p>Access conditions : </p>
+        <p><b>Content Notice : </b></p>
+    <?php echo htmlPrettyPrint(CONTENT_NOTICE); ?>
+    <p><b>Access conditions : </b></p>
     <?php echo htmlPrettyPrint(ACCESS_CONDITIONS); ?>
-    <p>Usage conditions : </p>
+    <p><b>Usage conditions : </b></p>
     <?php echo htmlPrettyPrint(USAGE_CONDITIONS); ?>
+    <br />
     <i>By submitting your email address, you are agreeing to the above <i>Conditions of Access</i> and <i>Conditions of use</i>.</p>
-    E-mail: <input type="text" name="email"/></p>
-    <p><input type="submit" value="Request the items"></p>
+    E-mail: <input type="text" name="Your email address"/> <input type="submit" value="Request the items"></p>
+    <p>These materials will be delivered to you as a single PDF document, through AARNet's Filesender. An email will be sent to you, with information about how to access the PDF file.  </p>
     </main>
     </div>
     <footer class="footer">
