@@ -24,7 +24,7 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(80);
         // Title
-        $this->Cell(30,10,'Title',1,0,'C');
+        $this->Cell(30,10,"BROW00003 - Ian's Death, Funeral, Power of Attorney and related materials",1,0,'C');
         // Line break
         $this->Ln(20);
     }
@@ -221,7 +221,7 @@ function pushImage($pdf, $file)
 function generatePDF($source, $destination, $recipient)
 {
     $pdf = new PDF();
-    $pdf->SetAutoPageBreak(false);
+    $pdf->SetAutoPageBreak(true);
     $pdf->AliasNbPages();
     $pdf->AddPage();
 
@@ -229,27 +229,34 @@ function generatePDF($source, $destination, $recipient)
     //$pdf->MultiCell(180,10,'This archive has been provided to '.$recipient.' under the following conditions: '.ACCESS_CONDITIONS);
     $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'Source Statement:');
-    $pdf->SetFont('Arial','',12);
+    $pdf->SetFont('Arial','',10);
     $pdf->MultiCell(180,6,'These materials are digital surrogates of part of the Brown Family Collection held and managed by  Australian Manuscripts Collection, State Library of Victoria, manuscript number MS 13489. These materials were discovered on the web via a finding aid, The Brown Family Guide to Records, initially published by the Australian Science and Technology Heritage Centre (now the eScholarship Research Centre) at the University of Melbourne <https://web.esrc.unimelb.edu.au/BROWt/brown.htm>.');
     $pdf->MultiCell(180,6,'');
     $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'Date of request for delivery:');
-    $pdf->SetFont('Arial','',12);
+    $pdf->SetFont('Arial','',10);
     $pdf->MultiCell(180,6,date('l jS \of F Y h:i:s A'));
     $pdf->MultiCell(180,6,'');
     $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'Item Description:');
-    $pdf->SetFont('Arial','',12);
-    $pdf->MultiCell(180,6,"File inscribed 'Ian's Death, Funeral etc', containing: death certificate, Gwen Marjorie Brown, 14 February 1992; small notebook (Book No 2), containing share information, 1970s-c1985; copy of income tax return, Dr Ian Brown, 1 July 1986 to 30 June 1987; letter from Kiddle Briggs Solicitors to Richard Brown, regarding the estate of Ian Brown, copy of Will attached, 2 March 1988; photocopy Power of Attorney documentation from Gwen Marjorie Brown to Ian Brown; photocopy of Administration Order appointing Richard Brown the Administrator of the estate of Gwen Marjorie Brown, 15 March 1988; Certificate of Cremation of Gwen Marjorie Brown, 17 February 1992; copy of last Will and Testament of Gwen Marjorie Brown, 21 June 1967; copy of inventory of assets of Ian Brown, 27 November 1987; typed message for Gwen Brown, after her death,1992; death registration of Ian Brown, 31 August 1987; Letters of Administration in the probate jurisdiction in the will and estate of Ian Brown, 10 February 1988; letter from Kiddle Briggs Solicitors to Richard Brown regarding the estate of Ian Brown, including a full copy of their trust ledger, 19 December 1989; 2 letters and 6 cards expressing sympathy at the deaths of Ian Brown (1987) and Gwen Brown (1992); letter to Ian and Gwen Brown from the Australian Broadcasting Commission, 15 September 1975; 6 notes of sympathy on Ian Brown's death, 1987; note of sympathy on Gwen Brown's death, 1992; letter and card from Guy Waddington to Ian Brown and family, 27 November 1987; letter of sympathy on Ian's death, 1987; hand-written card containing information about Gwen Brown's health, March 1981 -1984; extract of death registration, Ian Brown, 31 August 1987; letter and certificate of cremation, Ian Brown, 1987; 4 page hand-written copy of eulogy for Ian Brown, 3 September 1987; death and funeral notices for Ian Brown, 'The Age', Melbourne, 1 September 1987; typed letter to Richard Brown from John Lane, including copy of obituary for Ian Brown to be published in 'Chemistry in Australia', 17 September 1987; photograph of Ian Brown and rowing team from Collegiate School of St. Peter, 1934; hand-written card detailing appointments for November 1986; hand-written card detailing appointments for December 1985; and, hand-written card detailing medical information about Ian Brown, June 1986.");
+    $pdf->SetFont('Arial','',10);
+    $pdf->MultiCell(180,6,"File inscribed 'Ian's Death, Funeral etc', containing: death certificate, Gwen Marjorie Brown, 14 February 1992; small notebook (Book No 2), containing share information, 1970s-c1985; copy of income tax return, Dr Ian Brown, 1 July 1986 to 30 June 1987; letter from Kiddle Briggs Solicitors to Richard Brown, regarding the estate of Ian Brown, copy of Will attached, 2 March 1988; photocopy Power of Attorney documentation from Gwen Marjorie Brown to Ian Brown; photocopy of Administration Order appointing Richard Brown the Administrator of the estate of Gwen Marjorie Brown, 15 March 1988; Certificate of Cremation of Gwen Marjorie Brown, 17 February 1992; copy of last Will and Testament of Gwen Marjorie Brown, 21 June 1967; copy of inventory of assets of Ian Brown, 27 November 1987; typed message for Gwen Brown, after her death,1992; death registration of Ian Brown, 31 August 1987; Letters of Administration in the probate jurisdiction in the will and estate of Ian Brown, 10 February 1988; letter from Kiddle Briggs Solicitors to Richard Brown regarding the estate of Ian Brown, including a full copy of their trust ledger, 19 December 1989; 2 letters and 6 cards expressing sympathy at the deaths of Ian Brown (1987) and Gwen Brown (1992); letter to Ian and Gwen Brown from the Australian Broadcasting Commission, 15 September 1975; 6 notes of sympathy on Ian Brown's death, 1987; note of sympathy on Gwen Brown's death, 1992; letter and card from Guy Waddington to Ian Brown and family, 27 November 1987; letter of sympathy on Ian's death, 1987; hand-written card containing information about Gwen Brown's health, March 1981 -1984; extract of death registration, Ian Brown, 31 August 1987; letter and certificate of cremation, Ian Brown, 1987; 4 page hand-written copy of eulogy for Ian Brown, 3 September 1987; death and funeral notices for Ian Brown, 'The Age', Melbourne, 1 September 1987; typed letter to Richard Brown from John Lane, including copy of obituary for Ian Brown to be published in 'Chemistry in Australia', 17 September 1987; photograph of Ian Brown and rowing team from Collegiate School of St. Peter, 1934; hand-written card detailing appointments for November 1986; hand-written card detailing appointments for December 1985; and, hand-written card detailing medical information about Ian Brown, June 1986.\nCreator Ian Brown \nDate range 1934 - 1992    Quantity 2 cm, 1 file\n 
+Formats General Correspondence, News Clippings, Notebooks, Loose Notes, Mounted Photographic Prints, Photocopied Documents, Legal Documents and Calculations\n 
+Inventory Identifier BROW00003 Box Number 1 Series 1");
     $pdf->AddPage();
     $pdf->SetFont('Arial','B',16);
+    $pdf->MultiCell(180,10,'Content Notice:');
+    $pdf->SetFont('Arial','',10);
+    pdfPrettyPrint($pdf,CONTENT_NOTICE);
+    $pdf->MultiCell(180,6,'');
+    $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'Access Conditions:');
-    $pdf->SetFont('Arial','',12);
+    $pdf->SetFont('Arial','',10);
     pdfPrettyPrint($pdf,ACCESS_CONDITIONS);
     $pdf->MultiCell(180,6,'');
     $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'Conditions of use:');
-    $pdf->SetFont('Arial','',12);
+    $pdf->SetFont('Arial','',10);
     pdfPrettyPrint($pdf,USAGE_CONDITIONS);
     // Lets not recurse the entire collection!
     $source .= '/large';
@@ -319,5 +326,38 @@ function Preview($source)
 
     }
     return;
+}
+
+
+
+// Recursively preview/create a proof sheet of a collection
+function countitems($source)
+{
+    // IMAGETYPE is the directory that we're getting the source images - we'll use thumbnails at the moment, as quality doesn't matter; it might matter in future if we use seam carving
+    define("IMAGETYPE", 'thumbnails');
+
+	$items=0;
+    $source = str_replace('\\', '/', realpath($source));
+    $source = rtrim($source, "\\");
+
+    if (is_dir($source . "/" . "thumbnails") === true) {
+
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source . "/" . IMAGETYPE), RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file) {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                continue;
+
+            $file = realpath($file);
+            $imagedirectory = basename(dirname_r($file, 2));
+            if (is_file($file))
+		$items++;
+        }
+
+    }
+    return $items;
 }
 ?>
