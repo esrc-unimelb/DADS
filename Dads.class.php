@@ -1,5 +1,7 @@
 <?php
 require('fpdf.php');
+ // IMAGETYPE is the directory that we're getting the source images - we'll use thumbnails at the moment, as quality doesn't matter; it might matter in future if we use seam carving
+define("IMAGETYPE", 'thumbnails');
 
 class PDF extends FPDF
 {
@@ -296,11 +298,7 @@ Inventory Identifier BROW00003 Box Number 1 Series 1");
 
 // Recursively preview/create a proof sheet of a collection
 function Preview($source)
-{
-    // IMAGETYPE is the directory that we're getting the source images - we'll use thumbnails at the moment, as quality doesn't matter; it might matter in future if we use seam carving
-    define("IMAGETYPE", 'thumbnails');
-
-    $source = str_replace('\\', '/', realpath($source));
+{   $source = str_replace('\\', '/', realpath($source));
     $source = rtrim($source, "\\");
 
     if (is_dir($source . "/" . "thumbnails") === true) {
@@ -333,9 +331,6 @@ function Preview($source)
 // Recursively preview/create a proof sheet of a collection
 function countitems($source)
 {
-    // IMAGETYPE is the directory that we're getting the source images - we'll use thumbnails at the moment, as quality doesn't matter; it might matter in future if we use seam carving
-    define("IMAGETYPE", 'thumbnails');
-
 	$items=0;
     $source = str_replace('\\', '/', realpath($source));
     $source = rtrim($source, "\\");
