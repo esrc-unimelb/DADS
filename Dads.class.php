@@ -228,7 +228,7 @@ function generatePDF($source, $destination, $recipient)
     $pdf->AddPage();
 
     $pdf->sourcefilename = '';
-    //$pdf->MultiCell(180,10,'This archive has been provided to '.$recipient.' under the following conditions: '.ACCESS_CONDITIONS);
+
     $pdf->SetFont('Arial','B',16);
     $pdf->MultiCell(180,10,'Source Statement:');
     $pdf->SetFont('Arial','',10);
