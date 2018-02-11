@@ -26,7 +26,7 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(80);
         // Title
-        $this->Cell(30,10,"BROW00003 - Ian's Death, Funeral, Power of Attorney and related materials",1,0,'C');
+        $this->Cell(30,10,"BROW00003 - Ian's Death, Funeral, Power of Attorney and related materials",0,0,'C');
         // Line break
         $this->Ln(20);
     }

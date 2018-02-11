@@ -62,7 +62,7 @@ Request form for: <br \>
     <?php echo htmlPrettyPrint(USAGE_CONDITIONS); ?>
     <br />
     <i>By submitting your email address, you are agreeing to the above <i>Conditions of Access</i> and <i>Conditions of use</i>.</p>
-    E-mail: <input type="text" name="Your email address"/> <input type="submit" value="Request the items"></p>
+    E-mail: <input type="text" name="email"/> <input type="submit" value="Request the items"></p>
     <p>These materials will be delivered to you as a single PDF document, through AARNet's Filesender. An email will be sent to you, with information about how to access the PDF file.  </p>
     </main>
     </div>
